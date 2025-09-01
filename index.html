@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Plan lekcji</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    color: #e0e6ed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(29, 98, 209, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(72, 187, 120, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #34d399, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    text-shadow: 0 0 30px rgba(96, 165, 250, 0.3);
+  }
+  
+  .subtitle {
+    color: #9ca3af;
+    font-size: 1.1rem;
+    font-weight: 300;
+  }
+  
+  .table-wrapper {
+    background: rgba(31, 41, 55, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+  }
+  
+  th, td {
+    padding: 16px 12px;
+    text-align: center;
+    word-wrap: break-word;
+    border: none;
+    border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  th {
+    background: linear-gradient(135deg, rgba(29, 98, 209, 0.2), rgba(59, 130, 246, 0.1));
+    font-weight: 600;
+    font-size: 1rem;
+    color: #60a5fa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(59, 130, 246, 0.5);
+  }
+  
+  td {
+    background: rgba(31, 41, 55, 0.3);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .time-cell {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 139, 246, 0.1));
+    color: #a78bfa;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  
+  td:not(.time-cell):hover {
+    background: rgba(59, 130, 246, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+  }
+  
+  td:not(.time-cell):hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(52, 211, 153, 0.1));
+    pointer-events: none;
+  }
+  
+  /* Wszystkie przedmioty - kolor jak język polski */
+  .subject-polish { color: #60a5fa; }
+  .subject-english { color: #60a5fa; }
+  .subject-german { color: #60a5fa; }
+  .subject-math { color: #60a5fa; }
+  .subject-science { color: #60a5fa; }
+  .subject-social { color: #60a5fa; }
+  .subject-sports { color: #60a5fa; }
+  .subject-other { color: #60a5fa; }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .empty-cell {
+    background: rgba(17, 24, 39, 0.5) !important;
+    color: #4b5563;
+    font-style: italic;
+  }
+  
+  .empty-cell::after {
+    content: '—';
+  }
+  
+  @media (max-width: 768px) {
+    .title {
+      font-size: 2rem;
+    }
+    
+    th, td {
+      font-size: 0.8rem;
+      padding: 12px 8px;
+    }
+    
+    .time-cell {
+      font-size: 0.9rem;
+    }
+    
+    body {
+      padding: 15px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .title {
+      font-size: 1.6rem;
+    }
+    
+    th, td {
+      font-size: 0.7rem;
+      padding: 10px 6px;
+    }
+    
+    .time-cell {
+      font-size: 0.8rem;
+    }
+    
+    body {
+      padding: 10px;
+    }
+  }
+  
+  .glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+    }
+    to {
+      text-shadow: 0 0 30px rgba(96, 165, 250, 0.8);
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 class="title glow">Plan Lekcji</h1>
+    <p class="subtitle">Rozkład zajęć na cały tydzień</p>
+  </div>
+  
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 12%;">Godz.</th>
+          <th style="width: 17.6%;">Poniedziałek</th>
+          <th style="width: 17.6%;">Wtorek</th>
+          <th style="width: 17.6%;">Środa</th>
+          <th style="width: 17.6%;">Czwartek</th>
+          <th style="width: 17.6%;">Piątek</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="time-cell">1</td>
+          <td class="subject-polish">Język polski</td>
+          <td class="subject-german">Język niemiecki</td>
+          <td class="subject-polish">Język polski</td>
+          <td class="subject-polish">Język polski</td>
+          <td class="subject-german">Język niemiecki</td>
+        </tr>
+        <tr>
+          <td class="time-cell">2</td>
+          <td class="subject-social">Edukacja obywatelska</td>
+          <td class="subject-social">Historia</td>
+          <td class="subject-social">Geografia</td>
+          <td class="subject-science">Informatyka</td>
+          <td class="subject-other">Wychowanie do życia w rodzinie</td>
+        </tr>
+        <tr>
+          <td class="time-cell">3</td>
+          <td class="subject-social">Wiedza o społeczeństwie</td>
+          <td class="subject-other">Rewalidacja</td>
+          <td class="subject-sports">Wychowanie fizyczne</td>
+          <td class="subject-sports">Wychowanie fizyczne</td>
+          <td class="subject-social">Wiedza o społeczeństwie</td>
+        </tr>
+        <tr>
+          <td class="time-cell">4</td>
+          <td class="subject-other">Godzina wychowawcza</td>
+          <td class="subject-science">Fizyka</td>
+          <td class="subject-english">Język angielski</td>
+          <td class="subject-other">Rewalidacja</td>
+          <td class="subject-social">Geografia</td>
+        </tr>
+        <tr>
+          <td class="time-cell">5</td>
+          <td class="subject-math">Matematyka</td>
+          <td class="subject-polish">Język polski</td>
+          <td class="subject-english">Język angielski rozszerzony</td>
+          <td class="subject-math">Matematyka</td>
+          <td class="subject-sports">Wychowanie fizyczne</td>
+        </tr>
+        <tr>
+          <td class="time-cell">6</td>
+          <td class="subject-math">Matematyka</td>
+          <td class="subject-other">Rewalidacja</td>
+          <td class="subject-other">Biznes i zarządzanie</td>
+          <td class="subject-math">Matematyka</td>
+          <td class="subject-science">Biologia</td>
+        </tr>
+        <tr>
+          <td class="time-cell">7</td>
+          <td class="subject-other">Rewalidacja</td>
+          <td class="subject-english">Język angielski</td>
+          <td class="subject-social">Historia</td>
+          <td class="subject-math">Matematyka</td>
+          <td class="subject-english">Język angielski rozszerzony</td>
+        </tr>
+        <tr>
+          <td class="time-cell">8</td>
+          <td class="subject-science">Chemia</td>
+          <td class="subject-science">Chemia</td>
+          <td class="subject-social">Edukacja obywatelska</td>
+          <td class="subject-english">Język angielski</td>
+          <td class="subject-social">Historia</td>
+        </tr>
+        <tr>
+          <td class="time-cell">9</td>
+          <td class="subject-other">Edukacja regionalna</td>
+          <td class="subject-other">Religia</td>
+          <td class="empty-cell"></td>
+          <td class="empty-cell"></td>
+          <td class="empty-cell"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>
